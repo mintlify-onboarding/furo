@@ -1,0 +1,62 @@
+---
+title: "Authentication"
+---
+
+## Base URL
+
+인증 API는 HTTPS를 통해 제공됩니다. 
+
+문서의모든 URL의 기본은 **https://api.furo.one**입니다.
+
+## API key
+
+인증 API를 사용하면 Auth0을 사용할 때 사용자 ID의 모든 측면을 관리할 수 있습니다. 사용자가 로그인, 가입, API 액세스 등을 할 수 있도록 엔드포인트를 제공합니다.
+
+API의 인가는 기본적으로 **Basic Auth** 방식으로 합니다. 토큰 발급과, 유저 조회 API는 제외입니다. 이런 API들에는 HTTP header 값이 필요없다는 안내가 적혀있습니다.
+
+생성된 프로젝트의 **Client ID**와 **Public API Key/Admin API Key**를 `{Client ID}:{API Key}와 같이 배열하여`base64로 인코딩하여 Request의 Header에 **Authorization**으로 추가합니다.
+
+API key가 설정된 html header는 다음 예시와 같은 구조를 가집니다.
+
+```
+Header
+{
+	Authorization: "Basic NWEyOTgzNjE3MWFjNTY1NWM5MmY0ZWZmZTY0ZDE3YWI6YXBpa2V5LXB1YmxpYy1saXZlLTRkYmYyZmFmLTNhM2YtNDE3Yy1iMDQzLTNmMWQwMzFiMjNjNA=="
+	...
+}
+```
+
+### Public API Key / Admin API Key
+
+| Key            | 사용하는 API       | 공개 가능 여부 |
+| -------------- | -------------- | -------- |
+| Public API Key | Auth API       |          |
+| Admin API Key  | Management API |          |
+
+**Client ID**와 **Public API Key/Admin API Key**는 Furo Console의 개발자 도구 탭에서 확인하실 수 있습니다.
+
+![](/images/api/image.png)
+
+Furo console 개발자 도구 탭
+
+토큰이 유효하지 않을때 API들에서 공통적으로 나오는 에러 메시지입니다.
+
+#### Errors
+
+HTTP status code: **401**
+
+```
+{
+  "statusCode": 401,
+  "message": "",
+  "error": "Unauthorized"
+}
+```
+
+* message
+
+| value                | description                   |
+| -------------------- | ----------------------------- |
+| Invalid api key      | api key가 유효하지 않음              |
+| Invalid access token | Invalid access token이 유효하지 않음 |
+| token is expired     | token이 만료됨                    |

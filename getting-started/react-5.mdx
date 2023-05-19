@@ -1,0 +1,73 @@
+---
+title: "React 로 시작하기 (5분)"
+---
+
+**Good to know:** 현재 React를 지원하고 있습니다. 다른 언어는 API 방식으로 사용 가능해요. [다른 언어를 사용하고 계신가요?](/extras/faq#undefined)
+
+여러분은 Furo를 통해 React 어플리케이션에 빠르게 로그인 / 회원가입을 구현하고, 인증된 사용자의 정보를 활용할 수 있습니다. 이 가이드는 Git 샘플 프로젝트를 통해 간편하게 Furo 로그인을 구현하는 방법을 안내합니다.
+
+## 1\. Git 저장소 다운로드
+
+[Furo React Sample](https://github.com/furo-official/furo-sample-react) 프로젝트를 다운로드 받습니다. 
+
+```
+git clone https://github.com/furo-official/furo-sample-react
+```
+
+이어서 `npm` 패키지를 설치합니다
+
+```
+cd furo-sample-react
+
+npm install
+```
+
+## 2\. 프로젝트 설정
+
+[Furo 콘솔](https://console.furo.one/projects)의 \[프로젝트 정보\] 탭으로 넘어가 다음 두 가지 작업을 진행합니다.
+
+1. 1.  
+`App.js` 파일의 `clientId`에 콘솔에서 가져온 **Client ID**를 넣습니다.
+
+Client ID
+
+
+![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-03-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2011.03.06.png)
+
+
+* [Furo 콘솔](https://console.furo.one/projects)에서 생성한 프로젝트의 \[프로젝트 정보\]탭에서 Client ID를 확인할 수 있습니다.
+
+![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-03-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2011.37.33.png)
+
+2\. 콘솔 입력창의 **Default** **Callback URI**에 기본값 `https://sample.furo.one/{{YOUR_CLIENT_ID}} `를`http://localhost:3000/{{YOUR_CLIENT_ID}}` 로 변경합니다.
+
+redirectUri 와 callbackUri
+
+
+![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-03-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2011.05.59.png)
+
+
+* 로그인 후 사용자를 애플리케이션 내의 특정 페이지로 이동시킬 때 사용하는 속성입니다.
+
+* `redirectUri`는 애플리케이션 내에서 직접, `Default Callback URI`는 [Furo 콘솔](https://console.furo.one/projects)에서 각각 지정할 수 있습니다.
+
+* 앱 내에서 지정한 `redirectUri`는 통신 중에 악의적으로 조작될 위험이 있기 때문에, Furo 콘솔에서 `Default Callback URI`에 등록된 URI에 한해서만 `redirectUri`가 정상 동작합니다.
+
+
+## 3\. 프로젝트 실행
+
+다시 터미널로 돌아와서 아래 명령어를 입력합니다.
+
+```
+ npm start
+```
+
+[http://localhost:3000](https://localhost:3000) 에 들어가보면 아래와 같이 Furo가 연동된 로그인 기능을 테스트해 볼 수 있습니다.
+
+![](/images/getting-started/%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB%20%E1%84%80%E1%85%B5%E1%84%85%E1%85%A9%E1%86%A8%202023-03-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2011.22.47.gif)
+
+## Next Step
+
+Furo를 통해 5분만에 로그인 페이지가 완성되었습니다!
+
+이어서 바로 [Google 로그인을 연동](/getting-started/google-1)해 볼까요?

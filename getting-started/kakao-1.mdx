@@ -1,0 +1,44 @@
+---
+title: "Kakao 로그인 연동하기 (1분)"
+---
+
+이 가이드는 Furo를 통해 Kakao 로그인을 간편하게 구현하는 방법을 안내합니다.
+
+## Kakao 로그인 활성화 
+
+1. 1.  
+[Furo Console](https://console.furo.one/projects) 소셜 로그인 탭을 활성화합니다.
+
+2. 2.  
+테스트용 **Kakao REST API Key**를 카카오 Login 섹션의 **API Key**로 입력합니다.
+
+3. 3.  
+  
+![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202022-10-24%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%206.14.06.png)  
+버튼을 눌러서 카카오 로그인을 활성화시킵니다.
+
+| Kakao REST API Key               |
+| -------------------------------- |
+| dc6398c27709ce49d3b922a35c886dff |
+
+해당 키는 **테스트 목적으로만 사용**되어야 하며 의도하지 않은 오류가 발생할 수 있습니다. 따라서 프로덕션 환경에서 App을 배포하거나 다수의 개발자가 테스트하는 개발 환경에서 App을 테스트하는 경우 [Kakao OAuth](/guides/social-login/kakao-oauth) 페이지를 참고하여 직접 발급받은 키를 사용하시기 바랍니다.
+
+테스트용 Kakao REST API Key에서 허용되는 Redirect Url은 다음과 같습니다.
+
+* "http://localhost:3000"
+
+* "https://auth.furo.one"
+
+로컬 테스트 시 **3000 포트 이외 환경에서는 테스트용 Key가 정상 작동 하지 않습니다.**
+
+![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202022-11-01%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%204.41.39.png)
+
+## 로그인 화면 
+
+Kakao REST API Key가 성공적으로 연동되면 기존 소스를 수정하지 않아도 로그인/회원가입 페이지에 카카오 로그인 버튼이 반영된 것을 확인할 수 있습니다.
+
+![](/images/getting-started/kakao-login-auth.png)
+
+## Congratulations!
+
+Furo로 로그인 및 소셜 로그인을 모두 마치셨군요. Furo 개발팀은 유저들의 피드백에 대응하기 위해 항상 귀기울이고 있습니다. 커뮤니티에 참여하시면 가장 빠르게 개발 소식을 접할 수 있어요. 참여하시려면 [여기](https://discord.gg/g7pUbYeDWK)를 눌러주세요.

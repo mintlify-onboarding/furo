@@ -1,0 +1,189 @@
+---
+title: "사용자 JWT 검증하기"
+---
+
+이 문서는 **Furo**와 연동한 이후 나의 서버에서 유저를 어떻게 검증할 수 있을지에 대한 가이드를 제공합니다.
+
+## 개요
+
+내 서비스에서 유저에 대한 검증이 필요한 케이스는 상황에 따라 다양하겠지만, 대표적으로 **"내 서비스의 백엔드 API 서버에서 내 서비스 유저에게만 API 호출을 허용하고 싶을 때"**를 생각해볼 수 있습니다.
+
+**백엔드 API 서버**에서는 API를 호출한 주체가 내 서비스의 유저인지 아닌지를 어떻게 알 수 있을까요? 
+
+![](/images/guides/hwo%20to%20use%20JWT%20from%20furo%20to%20authorize%20user.png)
+
+how to use JWT from Furo to authorize user
+
+1\. 내 서비스의 웹 페이지에 들어온 유저들이 로그인을 시도합니다.
+
+2\. 해당 로그인 요청은 **Furo**로 가게되고 **Furo**에서는 로그인을 시도하는 유저에 대해 정보가 올바른지 검증하고 이상이 없다면 해당 유저의 정보를 내 프로젝트의 `**Client Secret**` 으로 서명해서 만든 **JWT**를 응답으로 줍니다.
+
+내 프로젝트의 Client Secret 확인하기
+
+
+![](/images/guides/image.png)
+
+
+* [Furo 콘솔](https://console.furo.one/projects)에서 생성한 프로젝트의 \[프로젝트 정보\] 탭에서 **Client Secret**을 확인하실 수 있습니다.
+
+3\. 웹 페이지에서는 **Furo**로부터 응답으로 받은 **JWT를 넣고** **백엔드 API 서버**를 호출합니다. (대부분 header에 `Authorization`에 **JWT**를 넣습니다.)
+
+4\. **백엔드 API 서버**에서는 **JWT**가 내 프로젝트의 `**Client Secret**`으로 서명된 게 맞는지 검증하고, 이상이 없다면 클라이언트의 요청을 수행 후 클라이언트에게 응답을 줍니다.
+
+## 직접해보기
+
+위에서 설명한 인증과정에 대한 이해를 돕기 위해 예제와 함께 실습을 해보도록 하겠습니다.
+
+### 백엔드
+
+#### 사전 준비
+
+[Express](https://expressjs.com/) 를 활용한 백엔드 API 서버를 만들어보도록 하겠습니다. 먼저 디렉토리 생성 및 필요한 실습에 필요한 패키지들을 설치해주세요.
+
+```
+mkdir backend-api && cd backend-api
+npm init -y
+npm install express jsonwebtoken dotenv cors
+touch app.js .env
+```
+
+그리고 `.env` 파일을 아래와 같이 작성해주세요.
+
+```
+# 내 프로젝트의 Client Secret을 확인하는 방법은 본 문서 위쪽을 참고해주세요.
+CLIENT_SECRET=""
+```
+
+#### 코드 작성
+
+위에서 생성한 `app.js` 를 열어서 아래의 코드를 복사해서 붙여넣어주세요.
+
+* API 라우트가 `GET /users/money` 하나만 있는 API 서버 코드 입니다.
+
+* `GET /users/money` 에서 JWT의 유효성을 검증할 때, **내 프로젝트의 Client Secret**으로 서명된 JWT인지 확인하고, 맞다면 데이터를 정상적으로 리턴해줍니다.
+
+```
+require('dotenv').config()
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const app = express();
+const port = 3001;
+
+app.use(cors());
+app.get('/users/money', (req, res) => {
+  // 헤더에 있는 JWT가 올바른 포맷인지 검증합니다.
+  const raw = req.header('authorization');
+  if (!raw.startsWith('Bearer')) {
+    return res.status(401).send({ status: 401, message: 'Invalid JWT' });
+  }
+  const JWT = raw.split(' ')[1];
+
+  // 유효한 JWT인지 검증합니다.
+  jwt.verify(JWT, process.env.CLIENT_SECRET, (err, decoded) => {
+    if (err) {
+      console.log(err);
+      return res.status(401).send({ status: 401, message: 'JWT verify failed' });
+    }
+
+    // 유효한 JWT였고 내 프로젝트의 Client Secret으로 서명된 JWT이므로
+    // 클라이언트의 요청을 수행한 후 응답을 줍니다.
+    return res.status(200).send({ money: 50000 });
+  });
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+}
+```
+
+위에서 작성한 코드를 `node app.js` 로 어플리케이션 서버를 실행합니다.
+
+이로써 백엔드 쪽은 준비가 끝났고 이제 프론트엔드쪽을 살펴보겠습니다.
+
+### 프론트엔드
+
+#### 사전 준비
+
+먼저 아래 가이드를 따라 Furo SDK가 적용된 React 예제 어플리케이션을 만들어주세요.
+
+[로그인/로그아웃 버튼 구현하기](/guides/start-with-react)
+
+#### 코드 작성
+
+위 가이드 문서를 따라서 작성한 `App.js` 코드 중 `ProtectedPage` 부분을 아래와 같이 수정해주세요.
+
+* 유저가 로그인 되어 있는지를 확인하고 되어 있다면 Furo로부터 해당 유저의 **JWT**를 받고, 그 **JWT**로 서비스 유저만 접근할 수 있는 API를 호출합니다.
+
+* 응답을 받으면 페이지에 해당 데이터를 표시합니다.
+
+```
+function ProtectedPage() {
+  const { user, logout, getAccessTokenSilently } = useFuro();
+  const navigate = useNavigate();
+  const [userMoney, setUserMoney] = useState([]);
+
+  async function fetchPrivateData() {
+    // endpoint에는 여러분이 연동하고자 하는 백엔드 API 엔드포인트 URL을 넣어주세요.
+    const endpoint = 'http://localhost:3001/users/money';
+
+    // 로그인한 유저의 데이터를 페이로드로 갖고 내 프로젝트의 Client Secret으로 서명된 JWT를 Furo로부터 받습니다.
+    const JWT = await getAccessTokenSilently();
+
+    // 해당 JWT를 사용하여 유저들만 호출할 수 있는 API를 호출합니다.
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${JWT}`
+      }
+    });
+    // 수신한 데이터를 페이지에 보여주기 위해 State를 설정합니다.
+    setUserMoney(await response.json());
+  }
+
+  return (
+      
+
+        [Protected]
+
+        Welcome, {user.email}
+
+        User money: {JSON.stringify(userMoney)}
+
+         {
+              fetchPrivateData()
+            }
+          }
+        >Call Private API
+        
+         {
+              navigate("/");
+              logout();
+            }}
+        > Logout
+      
+
+  );
+}
+
+```
+
+코드를 위와 같이 업데이트하고 `npm start` 로 어플리케이션을 실행합니다.
+
+
+![](/images/guides/image.png)
+
+
+**`Login`** 버튼을 눌러서 Furo로 로그인을 하면 로그인한 유저의 email과 함께 아래의 화면이 나옵니다.
+
+
+![](/images/guides/image.png)
+
+
+**`Call Private API`** 버튼을 누르면 내 서비스 유저만이 호출할 수 있는 API(`GET /users/money`)를 호출합니다.
+
+백엔드 API 서버로부터 응답을 받으면 아래와 같이 응답으로 받은 데이터를 화면에서 확인해볼 수 있습니다.
+
+
+![](/images/guides/image.png)
+

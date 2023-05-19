@@ -1,0 +1,252 @@
+---
+title: "Flutter로 시작하기 (5분)"
+---
+
+여러분은 Furo를 통해 React 어플리케이션에 빠르게 로그인 / 회원가입을 구현하고, 인증된 사용자의 정보를 활용할 수 있습니다. 이 가이드는 Flutter에서 Furo 로그인을 구현하는 방법을 안내합니다.
+
+## 1\. Flutter 개발환경 준비하기
+
+[https://docs.flutter.dev/get-started/install](https://docs.flutter.dev/get-started/install)
+
+위 flutter 공식 문서에 따라 flutter 개발 환경설정을 진행해주세요. 이미 flutter 개발환경이 설정되신 분은 넘어가셔도 좋습니다.
+
+
+### 1.1 web\_auth 라이브러리 설치 및 사용법
+
+이번 가이드에서 저희는 [flutter\_web\_auth](https://pub.dev/documentation/flutter%5Fweb%5Fauth/latest/)라는 라이브러리를 사용합니다. 라이브러리에 관한 사항은 링크를 참고해주세요.
+
+#### 설치
+
+`pubspec.yaml` 파일에 `dependencies` 섹션을 찾아 그곳에 라이브러리를 추가합니다. 예시는 다음과 같습니다.
+
+```
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_web_auth: ^0.5.0
+  http: ^0.13.6
+```
+
+#### 사용
+
+```
+import 'package:flutter_web_auth/flutter_web_auth.dart';
+
+final result = await FlutterWebAuth.authenticate(
+        url: loginUrl,
+        callbackUrlScheme: scheme
+);
+
+final code = Uri.parse(result).queryParameters['code'];
+print(code);
+```
+
+| parameter         | description                                                                                        | type   |
+| ----------------- | -------------------------------------------------------------------------------------------------- | ------ |
+| url               | 로그인 페이지의 주소                                                                                        | String |
+| callbackUrlScheme | 인증 후 callback을 받는 uri의 scheme(deep link) web: http/https mobile: {app.scheme} \[ ex) youtube:// \] | String |
+
+"callbackUrlScheme"은 유효한 스키마 문자열이어야만 작동합니다. 
+
+유효한 RFC 3986 URL 스키마는 "문자로 시작하고 문자, 숫자, 플러스 기호 ("+"), 점 (".") 또는 하이픈 ("-")의 조합이 이어져야 합니다."
+
+### 1.2 Sample Code
+
+lib/main.dart
+
+```
+import 'package:flutter/material.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+  final String title;
+
+  @override
+  State createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State {
+  String _counter = 'Hello Furo!';
+  final String _defaultMsg = 'Set Up Your Client ID';
+
+  Future _login() async {
+    const clientId = 'cc56fd283a912ac9fed43029e251e7ba';
+    if (clientId == _defaultMsg) {
+      setState(() {
+        _counter = _defaultMsg;
+      });
+      return;
+    }
+
+    const mode = 'web'; // web or mobile
+    const port = '45273';
+    const redirectUri = mode == 'web'
+        ? 'http://localhost:$port/auth.html'
+        : 'login.test.furo://auth';
+    const loginUrl =
+        'https://auth.furo.one/login/$clientId?redirect_uri=$redirectUri';
+
+    const scheme = mode == 'web' ? 'http' : 'login.test.furo';
+    final result = await FlutterWebAuth.authenticate(
+        url: loginUrl, callbackUrlScheme: scheme);
+    print(result);
+    final code = Uri.parse(result).queryParameters['code'];
+    if (code == null) {
+      return;
+    }
+    print(code);
+    var response = await http.post(
+      Uri.parse('https://api.furo.one/sessions/code/authenticate'),
+      headers: <string, string>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<string, string>{
+        'code': code,
+      }),
+    );
+    print(response.body);
+    setState(() {
+      _counter = response.body;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Click the button to login to Furo',
+            ),
+            Text(
+              _counter,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _login,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}</string,></string,>
+```
+
+## 2\. 로그인 설정
+
+`lib/main.dart `에 위치한 clientId 변수에 project의 clientId를 입력합니다
+
+Client ID
+
+
+![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-03-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2011.03.06.png)
+
+
+* [Furo 콘솔](https://console.furo.one/projects)에서 생성한 프로젝트의 \[프로젝트 정보\]탭에서 Client ID를 확인할 수 있습니다.
+
+![](/images/getting-started/Screenshot%20from%202023-05-08%2014-14-30.png)
+
+redirectUri 와 callbackUri
+
+
+![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-03-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2011.05.59.png)
+
+
+* 로그인 후 사용자를 애플리케이션 내의 특정 페이지로 이동시킬 때 사용하는 속성입니다.
+
+* `redirectUri`는 애플리케이션 내에서 직접, `Default Callback URI`는 [Furo 콘솔](https://console.furo.one/projects)에서 각각 지정할 수 있습니다.
+
+* 앱 내에서 지정한 `redirectUri`는 통신 중에 악의적으로 조작될 위험이 있기 때문에, Furo 콘솔에서 `Default Callback URI`에 등록된 URI에 한해서만 `redirectUri`가 정상 동작합니다.
+
+
+
+### 2.1 Web
+
+콘솔 입력창의 **Default** **C** **al** **lback URI**에 기본값 `https://sample.furo.one/{{YOUR_CLIENT_ID}} `를`http://localhost:{port}/auth.html` 로 변경합니다.
+
+
+프로젝트의 web 디렉토리 하위에 auth.html 파일을 추가합니다.
+
+```
+<!DOCTYPE html>
+Authentication complete
+
+  Authentication is complete. If this does not happen automatically, please
+  close the window.
+  
+
+```
+
+프로젝트를 시작 후 로그인 버튼을 눌러 furo에 로그인합니다.
+
+### 2.2 Android
+
+콘솔 입력창의 **Default** **C** **al** **lback URI**에 기본값 `https://sample.furo.one/{{YOUR_CLIENT_ID}} `를 `{app.scheme}://auth` 로 변경합니다.
+
+android/app/src/main/AndroidManifest.xml 파일에 {app.scheme}를 추가해야합니다.
+
+```
+
+      ...
+      
+
+```
+
+### 2.3 iOS
+
+ios/Runner/info.plist 파일에 {app.scheme}를 추가해야합니다.
+
+```
+CFBundleURLTypes
+
+	
+		CFBundleTypeRole
+		Editor
+		CFBundleURLName
+		{deeplink_name}
+		CFBundleURLSchemes
+		
+			{scheme}
+	
+
+```
+
+{deeplink\_name}과 {scheme}를 설정하시면 됩니다.
+
+프로젝트를 시작 후 로그인 버튼을 눌러 furo에 로그인합니다.
+
+
+![](/images/getting-started/test.gif)
+
+d

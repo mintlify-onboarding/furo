@@ -1,0 +1,42 @@
+---
+title: "Workspace"
+---
+
+## Entity
+
+| Name                 | Type   | Description                        |
+| -------------------- | ------ | ---------------------------------- |
+| workspace\_id        | String | Workspace ID                       |
+| project\_id          | String | Project ID                         |
+| name                 | String | Name of workspace                  |
+| invitation\_url      | String |                                   |
+| logo\_url            | String |                                   |
+| owner\_id            | String | Workspace owner's user ID          |
+| owner\_email         | String |                                   |
+| created\_at          | Date   |                                   |
+| modified\_at         | Date   |                                   |
+| allowed\_domains     | Array  | Allowed domain names for workspace |
+| description          | String | Description of workspace           |
+| total\_member\_count | Number | Number of total member             |
+
+## Example
+
+```
+{
+    "workspace_id": "wid-f614c439-fee9-406a-a490-c2bfca814b12",
+    "project_id": "dccc65c902eb168805b316e4a1c42e62",
+    "name": "Updated Workspace",
+    "invitation_url": "http://localhost:3000/invite?project_id=dccc65c902eb168805b316e4a1c42e62&workspace_id=wid-f614c439-fee9-406a-a490-c2bfca814b12",
+    "logo_url": "http://res.cloudinary.com/dsllzosoi/image/upload/v1678698294/qbisqeixn82z1hngmo2e.webp",
+    "owner_id": "76c6113c-9919-4bb0-9d12-58c118a571e6",
+    "owner_email": "user1@furo.one",
+    "created_at": "2023-03-15T04:33:13.949Z",
+    "modified_at": "2023-03-15T05:01:01.780Z",
+    "allowed_domains": [
+        "furo.one",
+        "hopae.io"
+    ],
+    "description": "This is updated workspace",
+    "total_member_count": 2
+}
+```

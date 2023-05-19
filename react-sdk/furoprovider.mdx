@@ -1,0 +1,30 @@
+---
+title: "FuroProvider"
+---
+
+Furo 로그인 기능 구현 시 필요한 최상위 컴포넌트로, Furo SDK를 사용하고자 하는 경로를 모두 감싸야 합니다. 
+
+## Usage
+
+```
+// src/index.js
+import React from "react";
+import ReactDOM from "react-dom";
+import { FuroProvider } from "furo-react";
+import App from "./App";
+
+ReactDOM.render(
+  
+    
+  ,
+  document.getElementById("root")
+);
+```
+
+## Parameter
+
+| 이름          | 타입     | Description                                                               | Required |
+| ----------- | ------ | ------------------------------------------------------------------------- | -------- |
+| domain      | string | loginWithRedirect 사용 리다이렉트할 로그인 페이지로, 기본값인 https://auth.furo.one 을 사용합니다. | O        |
+| clientId    | string | Furo 프로젝트 생성 시 할당받는 클라이언트 식별자입니다                                          | O        |
+| redirectUri | string | 로그인 이후 이동할 페이지의 uri 입니                                                    | O        |

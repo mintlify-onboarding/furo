@@ -1,41 +1,54 @@
 {
-    "name": "Furo",
-    "logo": {
-      "light": "/logo/light.svg",
-      "dark": "/logo/dark.svg"
+  "name": "Furo",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#2F54EB",
+    "light": "#5778FD",
+    "dark": "#2F54EB"
+  },
+  "topbarCtaButton": {
+    "name": "시작하기",
+    "url": "https://console.furo.one/projects"
+  },
+  "topbarLinks": [
+    {
+      "name": "로그인",
+      "url": "https://console.furo.one/projects"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Blog",
+      "icon": "blog",
+      "url": "https://www.furo.one/blog"
     },
-    "favicon": "/favicon.png",
-    "colors": {
-      "primary": "#",
-      "light": "#",
-      "dark": "#"
+    {
+      "name": "Roadmap",
+      "icon": "arrow-progress",
+      "url": "https://furo.hellonext.co/"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "introduction",
+        "getting-started/react-5",
+        "getting-started/flutter-5",
+        "getting-started/google-1",
+        "getting-started/kakao-1"
+      ]
     },
-    "topbarCtaButton": {
-      "name": "",
-      "url": ""
-    },
-    "topbarLinks": [
-      {
-        "name": "",
-        "url": ""
-      }
-    ],
-    "anchors": [
-      {
-        "name": "",
-        "icon": "",
-        "url": ""
-      }
-    ],
-    "navigation": [
-      {
-        "group": "",
-        "pages": [""]
-      }
-    ],
-    "footerSocials":
-      {
-          "twitter": "",
-          "linkedin": ""
-      }
+    {
+      "group": "Guides",
+      "pages": ["guides/overview"]
+    }
+  ],
+  "footerSocials": {
+    "discord": "https://www.furo.one/#"
   }
+}
