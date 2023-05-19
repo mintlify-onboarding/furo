@@ -189,14 +189,23 @@ redirectUri 와 callbackUri
 
 프로젝트의 web 디렉토리 하위에 auth.html 파일을 추가합니다.
 
-```
+```html
 <!DOCTYPE html>
-Authentication complete
-
+<title>Authentication complete</title>
+<p>
   Authentication is complete. If this does not happen automatically, please
   close the window.
-
-
+  <script>
+    console.log(window.location.href);
+    window.opener.postMessage(
+      {
+        "flutter-web-auth": window.location.href,
+      },
+      window.location.origin
+    );
+    window.close();
+  </script>
+</p>
 ```
 
 프로젝트를 시작 후 로그인 버튼을 눌러 furo에 로그인합니다.
