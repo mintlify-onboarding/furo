@@ -42,10 +42,6 @@
         "getting-started/google-1",
         "getting-started/kakao-1"
       ]
-    },
-    {
-      "group": "Guides",
-      "pages": ["guides/overview"]
     }
   ],
   "modeToggle": {
