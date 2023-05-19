@@ -1,8 +1,7 @@
 ---
 title: "Flutter로 시작하기 (5분)"
+description: "여러분은 Furo를 통해 React 어플리케이션에 빠르게 로그인 / 회원가입을 구현하고, 인증된 사용자의 정보를 활용할 수 있습니다. 이 가이드는 Flutter에서 Furo 로그인을 구현하는 방법을 안내합니다."
 ---
-
-여러분은 Furo를 통해 React 어플리케이션에 빠르게 로그인 / 회원가입을 구현하고, 인증된 사용자의 정보를 활용할 수 있습니다. 이 가이드는 Flutter에서 Furo 로그인을 구현하는 방법을 안내합니다.
 
 ## 1\. Flutter 개발환경 준비하기
 
@@ -10,10 +9,9 @@ title: "Flutter로 시작하기 (5분)"
 
 위 flutter 공식 문서에 따라 flutter 개발 환경설정을 진행해주세요. 이미 flutter 개발환경이 설정되신 분은 넘어가셔도 좋습니다.
 
+### 1.1 web_auth 라이브러리 설치 및 사용법
 
-### 1.1 web\_auth 라이브러리 설치 및 사용법
-
-이번 가이드에서 저희는 [flutter\_web\_auth](https://pub.dev/documentation/flutter%5Fweb%5Fauth/latest/)라는 라이브러리를 사용합니다. 라이브러리에 관한 사항은 링크를 참고해주세요.
+이번 가이드에서 저희는 [flutter_web_auth](https://pub.dev/documentation/flutter%5Fweb%5Fauth/latest/)라는 라이브러리를 사용합니다. 라이브러리에 관한 사항은 링크를 참고해주세요.
 
 #### 설치
 
@@ -42,12 +40,12 @@ final code = Uri.parse(result).queryParameters['code'];
 print(code);
 ```
 
-| parameter         | description                                                                                        | type   |
-| ----------------- | -------------------------------------------------------------------------------------------------- | ------ |
-| url               | 로그인 페이지의 주소                                                                                        | String |
+| parameter         | description                                                                                               | type   |
+| ----------------- | --------------------------------------------------------------------------------------------------------- | ------ |
+| url               | 로그인 페이지의 주소                                                                                      | String |
 | callbackUrlScheme | 인증 후 callback을 받는 uri의 scheme(deep link) web: http/https mobile: {app.scheme} \[ ex) youtube:// \] | String |
 
-"callbackUrlScheme"은 유효한 스키마 문자열이어야만 작동합니다. 
+"callbackUrlScheme"은 유효한 스키마 문자열이어야만 작동합니다.
 
 유효한 RFC 3986 URL 스키마는 "문자로 시작하고 문자, 숫자, 플러스 기호 ("+"), 점 (".") 또는 하이픈 ("-")의 조합이 이어져야 합니다."
 
@@ -169,32 +167,25 @@ class _MyHomePageState extends State {
 
 Client ID
 
-
 ![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-03-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2011.03.06.png)
 
-
-* [Furo 콘솔](https://console.furo.one/projects)에서 생성한 프로젝트의 \[프로젝트 정보\]탭에서 Client ID를 확인할 수 있습니다.
+- [Furo 콘솔](https://console.furo.one/projects)에서 생성한 프로젝트의 \[프로젝트 정보\]탭에서 Client ID를 확인할 수 있습니다.
 
 ![](/images/getting-started/Screenshot%20from%202023-05-08%2014-14-30.png)
 
 redirectUri 와 callbackUri
 
-
 ![](/images/getting-started/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-03-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2011.05.59.png)
 
+- 로그인 후 사용자를 애플리케이션 내의 특정 페이지로 이동시킬 때 사용하는 속성입니다.
 
-* 로그인 후 사용자를 애플리케이션 내의 특정 페이지로 이동시킬 때 사용하는 속성입니다.
+- `redirectUri`는 애플리케이션 내에서 직접, `Default Callback URI`는 [Furo 콘솔](https://console.furo.one/projects)에서 각각 지정할 수 있습니다.
 
-* `redirectUri`는 애플리케이션 내에서 직접, `Default Callback URI`는 [Furo 콘솔](https://console.furo.one/projects)에서 각각 지정할 수 있습니다.
-
-* 앱 내에서 지정한 `redirectUri`는 통신 중에 악의적으로 조작될 위험이 있기 때문에, Furo 콘솔에서 `Default Callback URI`에 등록된 URI에 한해서만 `redirectUri`가 정상 동작합니다.
-
-
+- 앱 내에서 지정한 `redirectUri`는 통신 중에 악의적으로 조작될 위험이 있기 때문에, Furo 콘솔에서 `Default Callback URI`에 등록된 URI에 한해서만 `redirectUri`가 정상 동작합니다.
 
 ### 2.1 Web
 
 콘솔 입력창의 **Default** **C** **al** **lback URI**에 기본값 `https://sample.furo.one/{{YOUR_CLIENT_ID}} `를`http://localhost:{port}/auth.html` 로 변경합니다.
-
 
 프로젝트의 web 디렉토리 하위에 auth.html 파일을 추가합니다.
 
@@ -204,7 +195,7 @@ Authentication complete
 
   Authentication is complete. If this does not happen automatically, please
   close the window.
-  
+
 
 ```
 
@@ -219,7 +210,7 @@ android/app/src/main/AndroidManifest.xml 파일에 {app.scheme}를 추가해야�
 ```
 
       ...
-      
+
 
 ```
 
@@ -230,23 +221,18 @@ ios/Runner/info.plist 파일에 {app.scheme}를 추가해야합니다.
 ```
 CFBundleURLTypes
 
-	
+
 		CFBundleTypeRole
 		Editor
 		CFBundleURLName
 		{deeplink_name}
 		CFBundleURLSchemes
-		
+
 			{scheme}
-	
+
 
 ```
 
-{deeplink\_name}과 {scheme}를 설정하시면 됩니다.
+{deeplink_name}과 {scheme}를 설정하시면 됩니다.
 
 프로젝트를 시작 후 로그인 버튼을 눌러 furo에 로그인합니다.
-
-
-![](/images/getting-started/test.gif)
-
-d
