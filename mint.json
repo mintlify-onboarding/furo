@@ -34,9 +34,12 @@
   ],
   "navigation": [
     {
+      "group": "Introduction",
+      "pages": ["introduction"]
+    },
+    {
       "group": "Getting Started",
       "pages": [
-        "introduction",
         "getting-started/react-5",
         "getting-started/flutter-5",
         "getting-started/google-1",
