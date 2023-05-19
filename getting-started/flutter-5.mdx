@@ -209,11 +209,11 @@ Authentication complete
   android/app/src/main/AndroidManifest.xml 파일에 {app.scheme}를 추가해야합니다.
 </Info>
 
-```
-
+```html
+<intent-filter>
       ...
-
-
+      <data android:scheme="app.test" />
+</intent-filter>
 ```
 
 ### 2.3 iOS
