@@ -223,18 +223,19 @@ Authentication complete
 </Info>
 
 ```dust
-CFBundleURLTypes
-
-
-		CFBundleTypeRole
-		Editor
-		CFBundleURLName
-		{deeplink_name}
-		CFBundleURLSchemes
-
-			{scheme}
-
-
+<key>CFBundleURLTypes</key>
+<array>
+	<dict>
+		<key>CFBundleTypeRole</key>
+		<string>Editor</string>
+		<key>CFBundleURLName</key>
+		<string>{deeplink_name}</string>
+		<key>CFBundleURLSchemes</key>
+		<array>
+			<string>{scheme}</string>
+		</array>
+	</dict>
+</array>
 ```
 
 {deeplink_name}과 {scheme}를 설정하시면 됩니다.
