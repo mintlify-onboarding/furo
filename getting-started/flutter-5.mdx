@@ -17,7 +17,7 @@ description: "여러분은 Furo를 통해 React 어플리케이션에 빠르게 
 
 `pubspec.yaml` 파일에 `dependencies` 섹션을 찾아 그곳에 라이브러리를 추가합니다. 예시는 다음과 같습니다.
 
-```
+```yaml
 dependencies:
   flutter:
     sdk: flutter
@@ -28,7 +28,7 @@ dependencies:
 
 #### 사용
 
-```
+```dart
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 final result = await FlutterWebAuth.authenticate(
@@ -51,9 +51,8 @@ print(code);
 
 ### 1.2 Sample Code
 
-lib/main.dart
-
-```
+<Accordion title="lib/main.dart">
+  ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:http/http.dart' as http;
@@ -160,6 +159,7 @@ class _MyHomePageState extends State {
   }
 }</string,></string,>
 ```
+</Accordion>
 
 ## 2\. 로그인 설정
 
